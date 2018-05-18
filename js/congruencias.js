@@ -1,45 +1,64 @@
 /**
- * Encuentra las soluciones de una ecuación
- * de congruencias completa
+ * Ecuación de congruencias completa
  * ax=b (mod n)
  */
-function ecuacionCompleta(a,b,n){
-  let max = mcd(a,n);
-  if( b % max != 0 ) throw "La ecuación no tiene solución";
-  congruencia = {
-    expresion: "x=" + b/max + "t + " + n/max + "k",
-    t: inverso(a/max,n/max),
-    sols: []
-  };
-  for(let k = 0; k < max; k++){
-    congruencia.sols.push(
-      ((b/max)*congruencia.t + (n/max)*k)%n
-    );
+class EcuacionCongruencias{
+  constructor(a,b,n){
+    let max = mcd(a,n);
+    this.coeficiente = a;
+    this.independiente = b;
+    this.modulo = n;
+    this.sols = [];
+
+    this.recalc();
   }
-  congruencia.sols.sort((a,b) => {
-    if( a == b ) return 0;
-    return a < b ? -1 : 1;
-  });
-  return congruencia;
+
+  recalc(){
+    let a = this.coeficiente;
+    let b = this.independiente;
+    let n = this.modulo;
+    let max = mcd(a,n);
+
+    this.sols = [];
+    try{
+      if( b % max != 0 ) throw "La ecuación no tiene solución";
+      let t = inverso(a/max,n/max);
+      for(let k = 0; k < max; k++){
+        this.sols.push(
+          ((b/max)*t + (n/max)*k)%n
+        );
+      }
+      this.sols.sort((a,b) => {
+        return a - b;
+      });
+    }catch(error){
+      this.sols = [];
+    }
+  }
+
+  setModudo(m){
+    this.modulo = m;
+    this.recalc();
+  }
+  get expresion(){
+    let b = this.independiente;
+    let n = this.modulo;
+    let max = mcd(this.coeficiente, n);
+    return "x=" + b/max + "t + " + n/max + "k";
+  }
 }
 
 /**
- * Encuentra las soluciones de una ecuación
- * de congruencias simple
+ * Euación de congruencias simple
  * x=a (mod n)
  */
-function ecuacionSimple(a, n, m){
-  m = m || 1;
-  a = a < 0 ? (a%n+n) : a%n;
-  congruencia = {
-    expresion : "x=" + a + "+" + n + "k",
-    representante: a,
-    sols : [],
-  };
-  for(let i = 0; i < m ; i++){
-    congruencia.sols.push(congruencia.representante + n*i);
+class EcuacionSimple extends EcuacionCongruencias{
+  constructor(a, n){
+    super(1,a,n);
   }
-  return congruencia;
+  get representante(){
+    return this.sols[0];
+  }
 }
 
 /**
