@@ -1,130 +1,112 @@
-/**
- * Ecuación de congruencias completa
- * ax=b (mod n)
- */
-class EcuacionCongruencias{
-  constructor(a,b,n){
-    let max = mcd(a,n);
-    this.coeficiente = a;
-    this.independiente = b;
-    this.modulo = n;
-    this.sols = [];
-
-    this.recalc();
-  }
-
-  recalc(){
-    let a = this.coeficiente;
-    let b = this.independiente;
-    let n = this.modulo;
-    let max = mcd(a,n);
-
-    this.sols = [];
-    try{
-      if( b % max != 0 ) throw "La ecuación no tiene solución";
-      let t = inverso(a/max,n/max);
-      for(let k = 0; k < max; k++){
-        this.sols.push(
-          ((b/max)*t + (n/max)*k)%n
-        );
-      }
-      this.sols.sort((a,b) => {
-        return a - b;
-      });
-    }catch(error){
-      this.sols = [];
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var EcuacionCongruencias = (function () {
+    function EcuacionCongruencias(a, b, n) {
+        var max = mcd2(a, n);
+        this.coeficiente = a;
+        this.independiente = b;
+        this.modulo = n;
+        this.sols = [];
+        this.recalc();
     }
-  }
-
-  setModudo(m){
-    this.modulo = m;
-    this.recalc();
-  }
-  get expresion(){
-    let b = this.independiente;
-    let n = this.modulo;
-    let max = mcd(this.coeficiente, n);
-    return "x=" + b/max + "t + " + n/max + "k";
-  }
-}
-
-/**
- * Euación de congruencias simple
- * x=a (mod n)
- */
-class EcuacionSimple extends EcuacionCongruencias{
-  constructor(a, n){
-    super(1,a,n);
-  }
-  get representante(){
-    return this.sols[0];
-  }
-}
-
-/**
- * Encuentra el inverso multiplicativo de un número
- */
-function inverso(a, n){
-  for(let i = 1; i <= n; i++){
-    if((a*i) % n == 1) return i;
-  }
-  throw "No hay inverso";
-}
-
-/**
- * Calcula el MCD usando el algritmo de Euclides
- * @param int[] una lista de enteros
- * @return el MCD
- */
-function mcd(){
-  //Interrumpir el proceso si no se dan por lo menos dos números
-  if(arguments.length < 2) throw 'Debes dar por lo menos dos números enteros positivos';
-  
-  //saca el mcd de dos números
-  if(arguments.length == 2){
-    a = validar( arguments[0] );
-    b = validar( arguments[1] );
-    while(a % b != 0){
-      residuo = a % b;
-      a = b;
-      b = residuo;
+    EcuacionCongruencias.prototype.recalc = function () {
+        var a = this.coeficiente;
+        var b = this.independiente;
+        var n = this.modulo;
+        var max = mcd2(a, n);
+        this.sols = [];
+        try {
+            if (b % max != 0)
+                throw "La ecuación no tiene solución";
+            var t = inverso(a / max, n / max);
+            for (var k = 0; k < max; k++) {
+                this.sols.push(((b / max) * t + (n / max) * k) % n);
+            }
+            this.sols.sort(function (a, b) {
+                return a - b;
+            });
+        }
+        catch (error) {
+            this.sols = [];
+        }
+    };
+    EcuacionCongruencias.prototype.setModulo = function (m) {
+        this.modulo = m;
+        this.recalc();
+    };
+    Object.defineProperty(EcuacionCongruencias.prototype, "expresion", {
+        get: function () {
+            var b = this.independiente;
+            var n = this.modulo;
+            var max = mcd2(this.coeficiente, n);
+            return "x=" + b / max + "t + " + n / max + "k";
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return EcuacionCongruencias;
+}());
+var EcuacionSimple = (function (_super) {
+    __extends(EcuacionSimple, _super);
+    function EcuacionSimple(a, n) {
+        return _super.call(this, 1, a, n) || this;
     }
-    return b;  
-  }
-  
-  //si se pasan más de dos argumentos se saca el mcd de dos en dos
-  else{
-    var min = arguments[0];
-    for(var i = 1; i < arguments.length; i++){
-      min = mcd(min, arguments[i]);
+    Object.defineProperty(EcuacionSimple.prototype, "representante", {
+        get: function () {
+            return this.sols[0];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return EcuacionSimple;
+}(EcuacionCongruencias));
+function sistemaCongruencias2(ec1, ec2) {
+    var a = ec1.coeficiente;
+    var b = ec1.independiente;
+    var m = ec1.modulo;
+    var c = ec2.coeficiente;
+    var d = ec2.independiente;
+    var n = ec2.modulo;
+}
+function inverso(a, n) {
+    if (mcd2(a, n) != 1)
+        throw "No tiene inverso";
+    var inv = 0;
+    for (var i = 1; i <= n; i++) {
+        if ((a * i) % n == 1) {
+            inv = i;
+            break;
+        }
     }
-    return min;
-  }
+    return inv;
 }
-
-/**
- * Calcula el mcm utilizando el MCD
- */
-function mcm(){
-  m = arguments[0];
-  for(i = 1; i < arguments.length; i++)
-      m = (m*arguments[i])/mcd(m,arguments[i]);
-  return m;
+function mcd() {
+    if (arguments.length < 2)
+        throw 'Debes dar por lo menos dos números enteros positivos';
+    var max = arguments[0];
+    for (var i = 0; i < arguments.length; i++) {
+        max = mcd2(max, arguments[i]);
+    }
+    return max;
 }
-
-  /*-- FUNCIONES AUXILIARES --*/
-  
-  //Esta función determina si un número "n" es entero
-  //Regresa true/false
-  function esEntero(n){
-    return Number(n) === n && n % 1 === 0;
-  }
-  
-  //Esta función determina si un número cumple con las condiciones requeridas
-  //si es así regresa el mismo número, si no, interrumpe el proceso
-  function validar(n){
-    if( !esEntero(n) || n < 1 ) throw 'Utiliza sólo números enteros positivos (mayores que cero)';
-    return n;
-  }
-
-  
+function mcd2(a, b) {
+    return b == 0 ? a : mcd2(b, a % b);
+}
+function mcm() {
+    var m = arguments[0];
+    for (var i = 1; i < arguments.length; i++)
+        m = mcm2(m, arguments[i]);
+    return m;
+}
+function mcm2(a, b) {
+    return (a * b) / mcd2(a, b);
+}
