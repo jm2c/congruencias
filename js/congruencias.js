@@ -23,6 +23,9 @@ var EcuacionCongruencias = (function () {
         var b = this.independiente;
         var n = this.modulo;
         var max = mcd2(a, n);
+        this.coeficiente /= max;
+        this.independiente /= max;
+        this.modulo /= max;
         this.sols = [];
         try {
             if (b % max != 0)
@@ -34,9 +37,6 @@ var EcuacionCongruencias = (function () {
             this.sols.sort(function (a, b) {
                 return a - b;
             });
-            this.coeficiente /= max;
-            this.independiente /= max;
-            this.modulo /= max;
         }
         catch (error) {
             this.sols = [];
@@ -75,13 +75,22 @@ var EcuacionSimple = (function (_super) {
             var b = this.independiente;
             var n = this.modulo;
             var max = mcd2(this.coeficiente, n);
-            return "x = " + b / max + " + " + n / max + "k";
+            return "x = " + (b / max) % this.modulo + " + " + n / max + "k";
         },
         enumerable: true,
         configurable: true
     });
     return EcuacionSimple;
 }(EcuacionCongruencias));
+function sistemaCongruencias(ecs) {
+    if (ecs.length < 2)
+        throw 'Debe haber al menos dos ecuaciones';
+    var sol = ecs[0];
+    for (var i = 1; i < ecs.length; i++) {
+        sol = sistemaCongruencias2(sol, ecs[i]);
+    }
+    return sol;
+}
 function sistemaCongruencias2(ec1, ec2) {
     var a = ec1.coeficiente;
     var b = ec1.independiente;

@@ -23,7 +23,9 @@ class EcuacionCongruencias{
         let b:number = this.independiente;
         let n:number = this.modulo;
         let max:number = mcd2(a,n);
-  
+        this.coeficiente /= max;
+        this.independiente /= max;
+        this.modulo /= max;
         this.sols = [];
         try{
             if( b % max != 0 ) throw "La ecuación no tiene solución";
@@ -36,9 +38,6 @@ class EcuacionCongruencias{
             this.sols.sort((a,b) => {
                 return a - b;
             });
-            this.coeficiente /= max;
-            this.independiente /= max;
-            this.modulo /= max;
         }catch(error){
             this.sols = [];
         }

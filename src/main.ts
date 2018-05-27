@@ -1,6 +1,18 @@
 /**
- * Resuelve un sistema de congruencias
- * Recibe dos EcuacionSimple
+ * Resuelve un sistema de multiples congruencias
+ */
+function sistemaCongruencias(ecs:EcuacionCongruencias[]):EcuacionCongruencias{
+    if(ecs.length < 2) throw 'Debe haber al menos dos ecuaciones';
+    let sol:EcuacionCongruencias = ecs[0];
+    for(let i = 1; i < ecs.length; i++){
+        sol = sistemaCongruencias2(sol, ecs[i]);
+    }
+    return sol;
+}
+
+/**
+ * Resuelve un sistema de 2 congruencias
+ * Recibe dos EcuacionCongruencia
  */
 function sistemaCongruencias2(ec1:EcuacionCongruencias, ec2:EcuacionCongruencias):EcuacionSimple{
     let a:number = ec1.coeficiente;

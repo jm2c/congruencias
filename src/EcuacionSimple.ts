@@ -13,6 +13,6 @@ class EcuacionSimple extends EcuacionCongruencias{
         let b:number = this.independiente;
         let n:number = this.modulo;
         let max:number = mcd2(this.coeficiente, n);
-        return "x = " + b/max + " + " + n/max + "k";
+        return "x = " + (b/max) % this.modulo + " + " + n/max + "k";
     }
 }
