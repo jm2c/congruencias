@@ -53,4 +53,10 @@ class EcuacionCongruencias{
         let max:number = mcd2(this.coeficiente, n);
         return "x = " + b/max + "t + " + n/max + "k";
     }
+    get latexExp():string{
+        let a:number | string = this.coeficiente == 1 ? '' : this.coeficiente;
+        let b:number = this.independiente;
+        let m:number = this.modulo;
+        return "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]";
+    }
 }

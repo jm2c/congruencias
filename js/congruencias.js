@@ -56,6 +56,16 @@ var EcuacionCongruencias = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(EcuacionCongruencias.prototype, "latexExp", {
+        get: function () {
+            var a = this.coeficiente == 1 ? '' : this.coeficiente;
+            var b = this.independiente;
+            var m = this.modulo;
+            return "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]";
+        },
+        enumerable: true,
+        configurable: true
+    });
     return EcuacionCongruencias;
 }());
 var EcuacionSimple = (function (_super) {

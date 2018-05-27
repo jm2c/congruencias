@@ -4,8 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Congruencias</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <style>
+        .container{
+            padding-top: 1rem;
+        }
+        .row{
+            margin-bottom: .5rem;
+        }
+        .mjx-chtml{
+            margin-top: 0.5em !important;
+        }
+        #solucion{
+            font-size: 1.4em;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+
+        <form action="" id="formulario">
+            <div id="ecuaciones"></div>
+            <div class="ec row">
+                <input class="form-control col-md-1" type="number">
+                \(x\equiv\)
+                <input class="form-control col-md-1" type="number">
+                (mód <input class="form-control col-md-1" type="number">)
+            </div>
+            <div class="row">
+                <button class="btn btn-primary btn-block">
+                    Resuelve
+                </button>
+            </div>
+        </form>
+        <div id="solucion">
+            \[
+                x\equiv 32\ (mód\ 115)
+            \]
+        </div>
+
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
     <script src="js/congruencias.js"></script>
+    <script src="js/uso.js"></script>
 </body>
 </html>
