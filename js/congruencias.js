@@ -11,6 +11,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var EcuacionCongruencias = (function () {
     function EcuacionCongruencias(a, b, n) {
+        if (!b || !n)
+            throw 'Argumentos inválidos';
+        a = a || 1;
         var max = mcd2(a, n);
         this.coeficiente = a;
         this.independiente = b;
@@ -61,7 +64,8 @@ var EcuacionCongruencias = (function () {
             var a = this.coeficiente == 1 ? '' : this.coeficiente;
             var b = this.independiente;
             var m = this.modulo;
-            return "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]";
+            var max = mcd2(this.coeficiente, m);
+            return "\\[" + a + "x\\equiv " + b / max + "\\ (mod\\ " + m + ")\\]";
         },
         enumerable: true,
         configurable: true

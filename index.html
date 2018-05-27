@@ -24,24 +24,26 @@
     <div class="container">
 
         <form action="" id="formulario">
-            <div id="ecuaciones"></div>
-            <div class="ec row">
-                <input class="form-control col-md-1" type="number">
-                \(x\equiv\)
-                <input class="form-control col-md-1" type="number">
-                (mód <input class="form-control col-md-1" type="number">)
-            </div>
             <div class="row">
-                <button class="btn btn-primary btn-block">
-                    Resuelve
+                <div class="ec row">
+                    <input class="form-control col-md-2" type="number" id="a" tabindex="1">
+                    \(x\equiv\)
+                    <input class="form-control col-md-2" type="number" id="b" tabindex="2">
+                    (mód&nbsp;<input class="form-control col-md-2" type="number" id="m" tabindex="3">)
+                </div>
+                <button id="btnAdd" class="btn btn-success btn-block">
+                    + Agreaga Ecuación
                 </button>
             </div>
         </form>
-        <div id="solucion">
-            \[
-                x\equiv 32\ (mód\ 115)
-            \]
+        <ul id="ecuaciones"></ul>
+
+        <div class="row">
+            <button class="btn btn-primary btn-block" id="solveBtn">
+                Resuelve
+            </button>
         </div>
+        <div id="solucion"></div>
 
     </div>
 

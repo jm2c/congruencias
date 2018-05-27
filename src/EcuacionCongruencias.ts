@@ -9,6 +9,9 @@ class EcuacionCongruencias{
     sols:number[];
 
     constructor(a:number, b:number, n:number){
+        if(!b || !n)
+            throw 'Argumentos inválidos';
+        a = a || 1;
         let max:number = mcd2(a,n);
         this.coeficiente = a;
         this.independiente = b;
@@ -57,6 +60,7 @@ class EcuacionCongruencias{
         let a:number | string = this.coeficiente == 1 ? '' : this.coeficiente;
         let b:number = this.independiente;
         let m:number = this.modulo;
-        return "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]";
+        let max:number = mcd2(this.coeficiente, m);
+        return "\\[" + a + "x\\equiv " + b/max + "\\ (mod\\ " + m + ")\\]";
     }
 }
