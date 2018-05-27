@@ -65,14 +65,16 @@ var EcuacionSimple = (function (_super) {
     }
     Object.defineProperty(EcuacionSimple.prototype, "representante", {
         get: function () {
-            return this.sols[0];
+            var r = this.sols[0];
+            this.independiente = r < 0 ? this.modulo + r : r;
+            return this.independiente;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(EcuacionSimple.prototype, "expresion", {
         get: function () {
-            var b = this.independiente;
+            var b = this.representante;
             var n = this.modulo;
             var max = mcd2(this.coeficiente, n);
             return "x = " + (b / max) % this.modulo + " + " + n / max + "k";
@@ -80,6 +82,14 @@ var EcuacionSimple = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    EcuacionSimple.prototype.masSoluciones = function (n) {
+        var mSols = [];
+        var a = this.representante;
+        var m = this.modulo;
+        for (var i = 0; i < n; i++)
+            mSols.push(a + m * i);
+        return mSols;
+    };
     return EcuacionSimple;
 }(EcuacionCongruencias));
 function sistemaCongruencias(ecs) {
