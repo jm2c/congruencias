@@ -34,6 +34,9 @@ var EcuacionCongruencias = (function () {
             this.sols.sort(function (a, b) {
                 return a - b;
             });
+            this.coeficiente /= max;
+            this.independiente /= max;
+            this.modulo /= max;
         }
         catch (error) {
             this.sols = [];
@@ -48,7 +51,7 @@ var EcuacionCongruencias = (function () {
             var b = this.independiente;
             var n = this.modulo;
             var max = mcd2(this.coeficiente, n);
-            return "x=" + b / max + "t + " + n / max + "k";
+            return "x = " + b / max + "t + " + n / max + "k";
         },
         enumerable: true,
         configurable: true
@@ -67,6 +70,16 @@ var EcuacionSimple = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(EcuacionSimple.prototype, "expresion", {
+        get: function () {
+            var b = this.independiente;
+            var n = this.modulo;
+            var max = mcd2(this.coeficiente, n);
+            return "x = " + b / max + " + " + n / max + "k";
+        },
+        enumerable: true,
+        configurable: true
+    });
     return EcuacionSimple;
 }(EcuacionCongruencias));
 function sistemaCongruencias2(ec1, ec2) {
@@ -76,6 +89,28 @@ function sistemaCongruencias2(ec1, ec2) {
     var c = ec2.coeficiente;
     var d = ec2.independiente;
     var n = ec2.modulo;
+    var max1 = mcd2(a, m);
+    var max2 = mcd2(c, n);
+    if (b % max1 != 0 || d % max2 != 0)
+        throw 'El sistema no tiene solución';
+    var t = inverso(a / max1, m / max1);
+    var u = inverso(c / max2, n / max2);
+    var ecSol1 = new EcuacionSimple(t * (b / max1), m / max1);
+    var ecSol2 = new EcuacionSimple(u * (d / max2), n / max2);
+    return sistemaSimple(ecSol1, ecSol2);
+}
+function sistemaSimple(ec1, ec2) {
+    var a = ec1.independiente;
+    var m = ec1.modulo;
+    var b = ec2.independiente;
+    var n = ec2.modulo;
+    var max = mcd2(m, n);
+    if ((b - a) % max != 0)
+        throw 'El sistema no tiene solución';
+    var t = inverso(m / max, n / max);
+    var coeficiente = a + m * t * (b - a) / max;
+    var modulo = mcm2(m, n);
+    return new EcuacionSimple(coeficiente, modulo);
 }
 function inverso(a, n) {
     if (mcd2(a, n) != 1)
