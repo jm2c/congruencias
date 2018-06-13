@@ -6,61 +6,74 @@ class EcuacionCongruencias{
     coeficiente:number;
     independiente:number;
     modulo:number;
-    sols:number[];
 
     constructor(a:number, b:number, n:number){
+        a = a || 1;
         if(!b || !n)
             throw 'Argumentos inválidos';
-        a = a || 1;
-        let max:number = mcd2(a,n);
+        if(!esEntero(a) || !esEntero(b) || !esEntero(n))
+            throw 'Argumentos inválidos';
+
         this.coeficiente = a;
         this.independiente = b;
         this.modulo = n;
-        this.sols = [];
-
-        this.recalc();
     }
   
-    recalc():void{
+    /**
+     * Teorema 3.14
+     */
+    solve():number[]{
         let a:number = this.coeficiente;
         let b:number = this.independiente;
         let n:number = this.modulo;
         let max:number = mcd2(a,n);
-        this.coeficiente /= max;
-        this.independiente /= max;
-        this.modulo /= max;
-        this.sols = [];
-        try{
-            if( b % max != 0 ) throw "La ecuación no tiene solución";
-            let t:number = inverso(a/max,n/max);
-            for(let k = 0; k < max; k++){
-                this.sols.push(
-                    ((b/max)*t + (n/max)*k)%n
-                );
-            }
-            this.sols.sort((a,b) => {
-                return a - b;
-            });
-        }catch(error){
-            this.sols = [];
+        let sols:number[] = [];
+        const numSols:number = max;
+
+        // Primero verifica si la ecuación tiene solución
+        if( b % max != 0 ) throw "La ecuación no tiene solución";
+
+        // Se reduce la ecuación si es posible
+        if(a % max == 0 && b % max == 0 && n % max == 0){
+            a /= max;
+            b /= max;
+            n /= max;
+            max = mcd2(a, n);
         }
+
+        // Se agregan las soluciónes al arreglo
+        let t:number = inverso(a/max, n/max);
+        for(let k = 0; k < numSols; k++){
+            sols.push(
+                ((b/max)*t + (n/max)*k)%this.modulo
+            );
+        }
+
+        // Se ordenan las soluciones
+        sols.sort((a,b) => {return a - b;});
+
+        return sols;
     }
   
+    setCoeficiente(a:number):void{
+        this.coeficiente = a;
+    }
+
+    setIndependiente(b:number):void{
+        this.independiente = b;
+    }
+
     setModulo(m:number):void{
         this.modulo = m;
-        this.recalc();
     }
-    get expresion():string{
-        let b:number = this.independiente;
-        let n:number = this.modulo;
-        let max:number = mcd2(this.coeficiente, n);
-        return "x = " + b/max + "t + " + n/max + "k";
-    }
-    get latexExp():string{
-        let a:number | string = this.coeficiente == 1 ? '' : this.coeficiente;
+
+    expresion(tex:boolean):string{
+        let a:number = this.coeficiente;
         let b:number = this.independiente;
         let m:number = this.modulo;
-        let max:number = mcd2(this.coeficiente, m);
-        return "\\[" + a + "x\\equiv " + b/max + "\\ (mod\\ " + m + ")\\]";
+        return tex ?
+            "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]" :
+            a + "<i>x<i> &equiv; " + b + " (<i>mod</i> " + m + ")";
     }
+
 }

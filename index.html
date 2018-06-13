@@ -6,6 +6,10 @@
     <title>Congruencias</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <style>
+        #formulario{
+            font-family: serif;
+            font-size: 20px;
+        }
         .container{
             padding-top: 1rem;
         }
@@ -15,8 +19,13 @@
         .mjx-chtml{
             margin-top: 0.5em !important;
         }
-        #solucion{
+        .solucion{
+            border: solid 3px crimson;
+            font-family: serif;
             font-size: 1.4em;
+            line-height: 2em;
+            margin: .5em 0;
+            text-align: center;
         }
     </style>
 </head>
@@ -26,10 +35,12 @@
         <form action="" id="formulario">
             <div class="row">
                 <div class="ec row">
-                    <input class="form-control col-md-2" type="number" id="a" tabindex="1">
-                    \(x\equiv\)
-                    <input class="form-control col-md-2" type="number" id="b" tabindex="2">
-                    (mód&nbsp;<input class="form-control col-md-2" type="number" id="m" tabindex="3">)
+                    <input class="form-control col-md-1" type="number" id="a" tabindex="1">
+                    <i>x</i>&nbsp;&equiv;
+                    <input class="form-control col-md-1" type="number" id="b" tabindex="2">
+                    &nbsp;(<i>mód</i>&nbsp;
+                    <input class="form-control col-md-1" type="number" id="m" tabindex="3">
+                    )
                 </div>
                 <button id="btnAdd" class="btn btn-success btn-block">
                     + Agreaga Ecuación
@@ -43,11 +54,17 @@
                 Resuelve
             </button>
         </div>
+        <div id="error"></div>
         <div id="solucion"></div>
+        <div class="row">
+            <button class="btn btn-danger btn-block" id="resetBtn">
+                Limpiar
+            </button>
+        </div>
 
     </div>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script> -->
     <script src="js/congruencias.js"></script>
     <script src="js/uso.js"></script>
 </body>
