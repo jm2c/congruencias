@@ -73,7 +73,7 @@ class EcuacionCongruencias{
         let m:number = this.modulo;
         return tex ?
             "\\[" + a + "x\\equiv " + b + "\\ (mod\\ " + m + ")\\]" :
-            a + "<i>x<i> &equiv; " + b + " (<i>mod</i> " + m + ")";
+            a + "<i>x</i> &equiv; " + b + " (<i>mod</i> " + m + ")";
     }
 
 }

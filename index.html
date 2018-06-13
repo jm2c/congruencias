@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <style>
         #formulario{
-            font-family: serif;
             font-size: 20px;
         }
         .container{
@@ -19,14 +18,18 @@
         .mjx-chtml{
             margin-top: 0.5em !important;
         }
+        .eqn, .eqns > li{
+            font-family: serif;
+            font-size: 20px;
+        }
         .solucion{
             border: solid 3px crimson;
-            font-family: serif;
-            font-size: 1.4em;
             line-height: 2em;
+            font-size: 1.4em;
             margin: .5em 0;
             text-align: center;
         }
+        
     </style>
 </head>
 <body>
@@ -34,7 +37,7 @@
 
         <form action="" id="formulario">
             <div class="row">
-                <div class="ec row">
+                <div class="eqn row">
                     <input class="form-control col-md-1" type="number" id="a" tabindex="1">
                     <i>x</i>&nbsp;&equiv;
                     <input class="form-control col-md-1" type="number" id="b" tabindex="2">
@@ -47,7 +50,7 @@
                 </button>
             </div>
         </form>
-        <ul id="ecuaciones"></ul>
+        <ul id="ecuaciones" class="eqns"></ul>
 
         <div class="row">
             <button class="btn btn-primary btn-block" id="solveBtn">
@@ -55,7 +58,7 @@
             </button>
         </div>
         <div id="error"></div>
-        <div id="solucion"></div>
+        <div id="solucion" class="eqn"></div>
         <div class="row">
             <button class="btn btn-danger btn-block" id="resetBtn">
                 Limpiar

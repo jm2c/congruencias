@@ -1,72 +1,97 @@
-const $formulario = document.getElementById('formulario');
+// Inicializa las variables
+const $a          = document.getElementById('a');
+const $b          = document.getElementById('b');
+const $m          = document.getElementById('m');
 const $ecuaciones = document.getElementById('ecuaciones');
-const $solveBtn = document.getElementById('solveBtn');
-const $resetBtn = document.getElementById('resetBtn');
-const $solucion = document.getElementById('solucion');
-const $error = document.getElementById('error');
+const $error      = document.getElementById('error');
+const $formulario = document.getElementById('formulario');
+const $resetBtn   = document.getElementById('resetBtn');
+const $solucion   = document.getElementById('solucion');
+const $solveBtn   = document.getElementById('solveBtn');
 let ecuaciones = [];
 
+// Agregar ecuación a la lista
 $formulario.addEventListener('submit', evt => {
     evt.preventDefault();
-    let a = document.getElementById('a').value || 1;
-    let b = document.getElementById('b').value;
-    let m = document.getElementById('m').value;
+    let a = parseInt($a.value) || 1;
+    let b = parseInt($b.value);
+    let m = parseInt($m.value);
     
     try{
         if(!esEntero(a) || !esEntero(b) || !esEntero(m))
             throw 'Datos inválidos';
 
         let nuevaEc = a == 1 ? new EcuacionSimple(b,m) : new EcuacionCongruencias(a,b,m);
-        console.log(nuevaEc);
         ecuaciones.push(nuevaEc);
+
         let $ecHtml = document.createElement("li");
         $ecHtml.innerHTML = nuevaEc.expresion();
         $ecuaciones.appendChild($ecHtml);
-        // updateMath();
     }catch(e){
         console.error(e);
         $error.innerText = e;
     }
     
-    $formulario.reset();
-    document.getElementById('a').focus();
+    clear();
 });
 
+// Resolver ecuación o sistema
 $solveBtn.addEventListener('click', function() {
-    if(ecuaciones.length == 0) return false;
-    if(ecuaciones.length == 1){
-        $solucion.innerHTML = ecuaciones[0].expresion();
-    }else{
-        var sol = sistemaCongruencias(ecuaciones);
-        $solucion.innerHTML = sol.expresion();
-    }
-    $solucion.classList.add('solucion');
-    // updateMath();
+    const numEcs = ecuaciones.length;
+
+    switch(numEcs){
+        case 0:
+            $error.innerText = "Agrega al menos una ecuación primero.";
+            break;
+        case 1:
+            let ec = ecuaciones[0];
+            if(ec.coeficiente == 1){
+                $solucion.innerHTML = ec.solExpresion()
+                                    + '<br/>'
+                                    + 'Algunas soluciones son: '
+                                    + '{' + ec.masSoluciones(5) + '}';
+            }else{
+                try{
+                    const sols = ec.solve();
+                    const numSols = sols.length;
+                    $solucion.innerHTML = 'Tiene ' + numSols + ' soluciones incongruentes: '
+                                        + '{' + sols + '}';
+                }catch(e){
+                    $error.innerText = e;
+                }
+            }
+            break;
+        default:
+            try{
+                var sol = sistemaCongruencias(ecuaciones);
+                $solucion.innerHTML = sol.expresion()
+                                    + '<br/>'
+                                    + sol.solExpresion()
+                                    + '<br/>'
+                                    + 'Algunas soluciones son: '
+                                    + '{' + sol.masSoluciones(5) + '}';
+            }catch(e){
+                $error.innerText = e;
+            }
+        }
+        $solucion.classList.add('solucion');
 });
 
+// Limpiar todo
 $resetBtn.addEventListener('click', function(){
-    $formulario.reset();
+    clear();
     ecuaciones = [];
     $ecuaciones.innerHTML = '';
+});
+
+function clear(){
+    $formulario.reset();
     $solucion.innerHTML = '';
     $solucion.classList.remove('solucion');
     $error.innerHTML = '';
-});
+    $a.focus();}
 
-// const updateMath = function(){
-//     MathJax.Hub.PreProcess();
-//     MathJax.Hub.Reprocess();
-// };
-
+// Acciones al cargar la página
 window.onload = function(){
-    document.getElementById('a').value = 15;
-    document.getElementById('b').value = 9;
-    document.getElementById('m').value = 18;
-}
-
-var ecs = [
-    new EcuacionSimple(1,2),
-    new EcuacionSimple(2,3),
-    new EcuacionSimple(3,4),
-    new EcuacionSimple(4,5)
-];
+    $a.focus();
+};
