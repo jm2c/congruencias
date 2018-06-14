@@ -67,7 +67,8 @@ var EcuacionSimple = (function (_super) {
         return _super.call(this, 1, b, n) || this;
     }
     EcuacionSimple.prototype.representante = function () {
-        return _super.prototype.solve.call(this)[0];
+        var r = _super.prototype.solve.call(this)[0];
+        return r >= 0 ? r : r + this.modulo;
     };
     EcuacionSimple.prototype.expresion = function (tex) {
         var b = this.representante();

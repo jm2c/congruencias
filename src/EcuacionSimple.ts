@@ -8,7 +8,8 @@ class EcuacionSimple extends EcuacionCongruencias{
     }
 
     representante():number{
-        return super.solve()[0];
+        let r = super.solve()[0];
+        return r >= 0 ? r : r + this.modulo;
     }
 
     expresion(tex:boolean):string{
